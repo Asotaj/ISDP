@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>${systemName}</title>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css?v=311"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/expand/css/style.css" media="all"/>
+    <style>
+        #fileDetail h2{
+            margin: 10px 10px 15px 20px;
+        }
+        #fileIcon{
+            height: 22px;
+            width: 22px;
+            margin: 0px 1px 2px 0px;
+        }
+        #fileContainer{
+            margin: 10px 10px 50px 20px;
+            position: relative;
+            /*overflow: hidden;*/
+            width: 935px;
+            height: 1000px;
+            border-bottom: 2px solid #333;
+        }
+        #fileContent{
+            /*width:935px;*/
+            /*height: 100%;*/
+            /*overflow-y: auto;*/
+            /*overflow-x: hidden;*/
+        }
+        #fileIframe{
+            width:935px;
+            height: 1000px;
+        }
+        /*#downloadFile{*/
+        /*    position: absolute;*/
+        /*    top: 1px;*/
+        /*    right: -71px;*/
+        /*    z-index: 9999;*/
+        /*}*/
+        #fileInfo{
+            margin: 10px 10px 15px 20px;
+        }
+        .fileInfo{
+            font-size: 12px;
+            color: #999999;
+            margin: 0px 10px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<div style="width: 98%;margin: 10px auto;" >
+    <div class="layui-row">
+        <div class="layui-col">
+            <div class="layui-card" style="margin: 10px auto;">
+<!--                <div class="layui-card-header" id="title"></div>-->
+                <div class="layui-card-body" style='width: 100%;margin: auto;' id='fileDetail'>
+                    <h2>
+                        <img id="fileIcon"/>
+                        <span id="fileName"></span>
+
+                    </h2>
+                    <div id="fileInfo">
+                        <i class="layui-icon layui-icon-user"></i>
+                        <span id ="uploadMan" class="fileInfo" style="margin-left: 5px;"></span>|
+                        <span id ="uploadTime" class="fileInfo"></span>|
+                        <span id ="readCount" class="fileInfo"></span>
+                    </div>
+                    <div id="fileContainer">
+                        <div id="fileContent">
+<!--                            <a id="downloadFile"><button class="layui-btn layui-btn-sm ">下载文档</button></a>-->
+<!--                        <div><img src="/assets/expand/images/u675.svg"></div>-->
+                            <iframe id="fileIframe">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+        addCtx: function (ctx) {
+            if (this.ctxPath === "") {
+                this.ctxPath = ctx;
+            }
+        }
+    };
+    Feng.addCtx("${ctxPath}");
+</script>
+
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js?v=311"></script>
+<script type="text/javascript" src="${ctxPath}/assets/expand/plugins/echart/echarts.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/expand/plugins/echart/extension/echarts-wordcloud.js"></script>
+
+<script>
+layui.use(['layer','ax','element','util'],function () {
+    var $=layui.jquery;
+    var $ax = layui.ax;
+    var $layer = layui.layer;
+    var element = layui.element;
+    var util = layui.util;
+
+    var fileId = getQueryVariable("id");
+
+    $.ajax({
+        url:Feng.ctxPath + "/tools/initFileDetail/"+fileId,
+        type:"get",
+        success:function (result) {
+            initFileDetail(result);
+        }
+    });
+
+    util.fixbar({
+        bar1: "&#xe601;",
+        css: {right: 50, bottom: 30},
+        click: function(type){
+            console.log(type);
+            if(type === 'bar1'){
+                window.open(Feng.ctxPath+"/tools/downloadFile/"+fileId);
+            }
+        }
+    });
+
+    function initFileDetail(result){
+        $("#fileIcon").attr("src",Feng.ctxPath + '/assets/expand/images/'+result["fileType"]+'-icon.jpg');
+        $("#fileName").text(result["name"]);
+        $("#uploadMan").text(result["uploadMan"]);
+        $("#uploadTime").text(result["uploadTime"]);
+        $("#readCount").text(result["readCount"]+"人阅读");
+        // $("#downloadFile").attr("href",Feng.ctxPath+"/tools/downloadFile/"+result["id"]);
+        $("#fileIframe").attr("src", "http://localhost:8080/assets/expand/pdf/web/viewer.html?file=http://localhost:8080/tools/preViewFile/"+result["id"]);
+        // var iframe = document.getElementById("fileIframe");
+        // iframe.onload=function(){
+        //     setTimeout(function () {
+        //         console.log($("#fileIframe").contents().find("#viewer").css("height"))
+        //     },2000);
+        // };
+    }
+
+    //获取url参数
+    function getQueryVariable(variable)
+    {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+    }
+});
+
+</script>
+
+</body>
+</html>

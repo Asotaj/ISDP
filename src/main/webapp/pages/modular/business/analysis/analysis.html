@@ -1,0 +1,98 @@
+@layout("/common/_container.html",{js:["/assets/expand/plugins/jquery/jquery-3.2.1.min.js","/assets/expand/plugins/echart/echarts.js","/assets/modular/business/analysis/analysis.js"],css:["/assets/expand/plugins/formSelects/formSelects-v4.css"]}){
+<style>
+    .layui-select{
+        height: 26px;
+        line-height: 1.3;
+        border-width: 1px;
+        border-style: solid;
+        background-color: #fff;
+        border-radius: 2px;
+    }
+    .layui-btn-xs {
+        height: 22px;
+        line-height: 22px;
+        padding: 0 4px;
+        font-size: 12px;
+    }
+</style>
+<div class="layui-body-header">
+    <span class="layui-body-header-title">情报</span>
+</div>
+
+<div style="padding: 10px; background-color: #F2F2F2;">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <div class="pull-right">
+                        <div class="layui-inline">
+                            <div class="layui-input-inline">
+                                <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" style="height: 36px;width:100px;">
+                            </div>
+
+                            <div class="layui-input-inline">
+                                <input type="text" name="date" id="date1" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" style="height: 36px;width:100px;">
+                            </div>
+
+                            <div class="layui-input-inline" lay-filter="category">
+                                <select class="layui-select" xm-select="category" xm-select-show-count="1" style="width:190px;">
+                                    <option value="">分类</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline" lay-filter="source">
+                                <select class="layui-select" xm-select="source" xm-select-show-count="1" style="width:190px;">
+                                    <option value="">来源</option>
+                                </select>
+                            </div>
+                            <button type="button" id="btnSearch"  class="layui-btn layui-btn-primary" style="height: 36px;line-height: 30px;">搜索</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-row">
+                        <div class="layui-col-xs12 layui-col-md8">
+                            <div class="grid-demo grid-demo-bg1" style="padding: 5px 20px 10px 10px;">
+                                    <textarea name="regular" id="regular" placeholder="(中国电信|中国移动|中国联通|运营商|国外运营商)+(5G|下一代互联网)" class="layui-textarea" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 layui-col-md4">
+                            <div class="layui-row">
+                                <div class="grid-demo">
+                                    规则输入说明书：与、并、或、加、减、统计等正则规则表达式为：（、）、|、+、—
+                                </div>
+                            </div>
+                            <div class="layui-row" style="position:absolute;top:90px;">
+                                <button type="button" name="savefx" class="layui-btn layui-btn-sm layui-btn-normal">分析</button>
+                                <button type="button" name="saverule" class="layui-btn layui-btn-sm layui-btn-normal">保存为规则</button>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 layui-col-md12">
+                            <div class="grid-demo grid-demo-bg2" style="padding-left: 10px;" id="guizegl">
+                                <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">自定义规则</button>
+
+                                <a id="gzgl" style="cursor: pointer;margin-left: 50px;">规则管理>></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <table class="layui-table" id="articleTable" lay-filter="articleTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="tableBar">
+    {{#  if(d.is_save == '未收藏'){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="collect">收藏</a>
+    {{#  }else if(d.is_save == "已收藏"){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="collect">收藏</a>
+    {{#  } }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+</script>
+@}

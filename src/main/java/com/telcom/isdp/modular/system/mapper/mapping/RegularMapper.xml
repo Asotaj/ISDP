@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telcom.isdp.modular.system.mapper.RegularMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.telcom.isdp.modular.system.entity.Regular">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="regular" property="regular" />
+        <result column="creater_id" property="creater_id" />
+        <result column="creater" property="creater" />
+        <result column="is_deleted" property="is_deleted" />
+        <result column="is_show" property="is_show" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id", name AS "name", regular AS "regular", creater_id AS "creater_id", creater AS "creater", is_deleted AS "is_deleted", is_show AS "is_show"
+    </sql>
+
+    <select id="selectRegular" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from regular
+        where is_deleted=0
+        <if test="condition != null">
+         and name like CONCAT('%',#{condition},'%')
+        </if>
+
+    </select>
+
+<!--    <select id="showRegularCount" resultType="int">-->
+<!--        select -->
+<!--        count(1)-->
+<!--        from regular-->
+<!--        where is_show = 1-->
+<!--    </select>-->
+<!--    </select>-->
+
+    <select id="selectRegularByShow" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from regular
+        where is_deleted=0 and is_show=1
+     </select>
+
+    <select id="selectRegularByGZ" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from regular
+       where name is null
+    </select>
+
+    <select id="selectRegularByCon" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from regular
+        where 1=1
+       
+    </select>
+
+   
+    <delete id="deleteRegular">
+		delete from regular where id = #{id}
+	</delete>
+
+</mapper>

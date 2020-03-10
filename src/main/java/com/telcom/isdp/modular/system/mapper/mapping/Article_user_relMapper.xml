@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telcom.isdp.modular.system.mapper.Article_user_relMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.telcom.isdp.modular.system.entity.Article_user_rel">
+        <id column="id" property="id" />
+        <result column="user_id" property="user_id" />
+        <result column="user_name" property="user_name" />
+        <result column="article_id" property="article_id" />
+        <result column="is_deleted" property="is_deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id", user_id AS "user_id", user_name AS "user_name", article_id AS "article_id", is_deleted AS "is_deleted"
+    </sql>
+
+    <select id="selectArticle_user_rel" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from article_user_rel
+        <if test="user_id != null">
+
+        </if>
+
+    </select>
+    <select id="selectByUser" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from article_user_rel
+        where 1=1
+        <if test="user_id != null">
+            AND user_id = #{user_id}
+        </if>
+
+    </select>
+
+
+    <delete id="deleteArticle_user_rel">
+		delete from article_user_rel where user_id = #{user_id} and article_id = #{article_id}
+	</delete>
+
+</mapper>

@@ -1,0 +1,63 @@
+@layout("/common/_container.html",{js:["/assets/expand/plugins/jquery/jquery-3.2.1.min.js","/assets/expand/plugins/echart/echarts.simple.js","/assets/modular/business/analysis/content.js"],css:["/assets/expand/plugins/formSelects/formSelects-v4.css"]}){
+<style>
+
+</style>
+<div style="width: 100%" >
+    <div class="layui-row">
+        <div class="layui-col-xs12 layui-col-md8">
+            <div class="grid-demo">
+                <div class="layui-card" style="min-height: 700px;margin: 10px 10px 10px 100px">
+                    <div id='title' class="layui-card-header">文章标题</div>
+                    <div class="layui-card-body">
+                        <div class="layui-row">
+                            <div class="layui-col" id="articleInfo">
+                                文章信息
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col" id="articleContent">
+                                文章内容
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-md4">
+            <div class="grid-demo">
+                <div class="layui-row">
+                    <div class="layui-col">
+                        <div class="layui-card" style="height: 250px;margin: 10px 100px 10px 0px;">
+                            <div class="layui-card-header">主题分词</div>
+                            <div class="layui-card-body" id="keywords">
+                                卡片式面板面板通常用于非白色背景色的主体内<br>
+                                从而映衬出边框投影
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col">
+                        <div class="layui-card" style="height: 250px;margin: 10px 100px 10px 0px;">
+                            <div class="layui-card-header">文章分类</div>
+                            <div class="layui-card-body" id="category">
+                                卡片式面板面板通常用于非白色背景色的主体内<br>
+                                从而映衬出边框投影
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    layui.use(['layer'], function(){
+        var layer=layui.layer;
+        var router = layui.router();
+        layer.alert(router.search.id);//弹出提示 “xxx”
+
+    });
+</script>
+@}

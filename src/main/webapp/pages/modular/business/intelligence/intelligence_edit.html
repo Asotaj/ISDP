@@ -1,0 +1,54 @@
+@layout("/common/_container.html",{bg:"bg-white",js:["/assets/modular/business/intelligence/intelligence_edit.js"]}){
+<form id="articleForm" lay-filter="articleForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <input name="url" type="hidden"/>
+    <input name="content" type="hidden"/>
+    <input name="website" type="hidden"/>
+    <input name="abstracts" type="hidden"/>
+    <input name="category" type="hidden"/>
+    <input name="is_deleted" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input name="title" placeholder="请输入标题" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">来源<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input name="source" placeholder="请输入来源" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">发布日期</label>
+        <div class="layui-input-block">
+            <input id="time" name="time" type="text" class="layui-input" autocomplete="off"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">作者<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input id="author" name="author" placeholder="请输入作者" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">相似文章数<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input id="like_article_count" name="like_article_count" placeholder="相似文章数"  type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">关键词<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input id="keywords" name="keywords" placeholder="关键词" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+@}

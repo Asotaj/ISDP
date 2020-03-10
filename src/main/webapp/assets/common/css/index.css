@@ -1,0 +1,42 @@
+.layui-layout-admin .layui-body {
+    left: 0px;
+    top: 50px;
+    transition: left .3s;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    bottom: 0px;
+}
+.layui-body-header.show+div {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 30px;
+    bottom: 0;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.layui-body-header-title {
+    border-left: 4px solid #009688;
+    padding-left: 6px;
+    font-size: 14px;
+}
+.layui-body-header {
+    padding: 5px 20px;
+    color: #333;
+    font-size: 16px;
+    background-color: #fff;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: none;
+}
+.layui-nav .layui-nav-more{
+    position:absolute;
+    right: 0px;
+}
+.layui-nav .layui-nav-mored{
+    position:absolute;
+    right: 0px;
+}

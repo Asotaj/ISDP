@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>${systemName}</title>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css?v=311"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/expand/css/style.css" media="all"/>
+
+    <style>
+        .layui-tab-title li {
+            min-width: 46px;
+        }
+        .grid-demo{
+            text-align: center;
+        }
+        #toolSuggest{
+            position: absolute;
+            border: 1px solid #333;
+            border-radius: 3px;
+            background-color: #525345;
+            padding: 5px;
+            color: #f9f9f9;
+            opacity:0.9;
+            word-wrap: break-word;
+            word-break: break-all;
+            min-height:20px;
+            min-width:50px;
+            max-width:130px;
+            overflow: hidden;
+            display: none
+        }
+        .tool-img{
+            height: 100px;
+            width: 50px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<div style="padding: 10px; background-color: #F2F2F2;">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <div class="layui-card">
+                <div class="layui-card-header"><b>情报快讯</b><span class="pull-right">近15日内统计数据</span></div>
+                <div class="layui-card-body">
+                    <div id="line" style="width:100%;height: 210px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-tab layui-tab-brief" lay-filter="demo">
+                        <ul class="layui-tab-title" id="hotHead"></ul>
+                        <div class="layui-tab-content" style="height: 192px;" id="hotArticles"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header"><b>分类词云</b></div>
+                <div class="layui-card-body">
+                    <div class="layui-row" id="keywordCloud"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header"><b>数据库</b></div>
+                <div class="layui-card-body">
+                    <div class="layui-row">
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo">
+                                <div id="bar1" style="height: 200px;width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo">
+                                <div id="bar2" style="height: 200px;width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo">
+                                <div id="bar3" style="height: 200px;width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo">
+                                <div id="bar4" style="height: 200px;width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md8">
+            <div class="layui-card">
+                <div class="layui-card-header"><b>决策工具</b></div>
+                <div class="layui-card-body">
+                    <div><b>方法库</b><div class="pull-right"><a href="${ctxPath}/tools/methods">更多>></a></div></div>
+                    <div class="layui-row layui-col-space1" id="methodLib">
+
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <div><b>案例库</b><div class="pull-right"><a href="${ctxPath}/tools/cases">更多>></a></div></div>
+                    <div class="layui-row layui-col-space1" id="caseLib">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header"><b>半月精品委员会</b></div>
+                <div class="layui-card-body">
+                    <div class="layui-row">
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo" style="margin-right: 10px;">
+                                <img style="height: 100px; width: 50px;" src="/assets/expand/images/jifen.svg"/>
+                                <div>积累专家积分</div>
+                                <div style="font-size: 8px">加入到半月精品评审委员会，可发挥您在决策领域专家影响力</div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo" style="margin-left: 10px;">
+                                <img style="height: 100px; width: 50px;" src="/assets/expand/images/dianxin.svg"/>
+                                <div>与电信共同成长</div>
+                                <div style="font-size: 8px">从专业、价值的角度，影响整个中国电信在战略决策上的布局</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-xs6 layui-col-md12">
+                            <div class="grid-demo grid-demo-bg2">
+                                <button type="button" class="layui-btn layui-btn-primary" style="width: 100%">立即加入</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+@/* 加入contextPath属性和session超时的配置 */
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+        addCtx: function (ctx) {
+            if (this.ctxPath === "") {
+                this.ctxPath = ctx;
+            }
+        }
+    };
+    Feng.addCtx("${ctxPath}");
+</script>
+
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js?v=311"></script>
+<script type="text/javascript" src="${ctxPath}/assets/expand/plugins/echart/echarts.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/expand/plugins/echart/extension/echarts-wordcloud.js"></script>
+
+<script>
+var legendMap = {
+    "hot":"热点"
+};
+
+layui.use(['element', 'layer', 'carousel', 'ax'], function () {
+    var $ = layui.jquery;
+    var $ax = layui.ax;
+    var layer = layui.layer;
+    var carousel = layui.carousel;
+    var device = layui.device;
+    var element = layui.element;
+
+    // var active = {
+    //     tabChange: function(){
+    //         //切换到指定Tab项
+    //         element.tabChange('demo', 'standard'); //切换到：用户管理
+    //     }
+    // };
+    //
+    // $('.layui-tab-name').on('click', function(){
+    //     var othis = $(this), type = othis.data('type');
+    //     alert(type);
+    //     //active[type] ? active[type].call(this, othis) : '';
+    // });
+
+    var getLegend = new $ax(Feng.ctxPath +"/dict/list?dictTypeId=1192261339146403841" );
+    var response = getLegend.start();
+    $.each(response.data, function (i, value) {
+        legendMap[value.code]=value.name;
+    });
+    console.log(legendMap);
+
+
+    var ajax = new $ax(Feng.ctxPath + "/console/init");
+    var result= ajax.start();
+    console.log(result);
+
+    initLine(result["line"]);
+    initCloud(result["cloud"]);
+    initHotArticles(result["hot"]);
+    initTools(result["tools"]);
+
+    initBar();
+
+    element.init();
+
+    /*---------------------functions----------------------*/
+    function intiXAxis(){
+        var xAxis = [];
+        var date = new Date();
+        for(var i=0;i<15;i++){
+            date.setDate(date.getDate()-1);
+            xAxis[i] = date.getMonth()+1+"-"+date.getDate();
+        }
+        xAxis.reverse();
+        return xAxis;
+    }
+
+    function initLine(result) {
+        var keys = [];
+        var values = [];
+        for(var key in result){
+            keys.push(legendMap[key]);
+            var temp = {
+                name:legendMap[key],
+                type:'line',
+                stack: key,
+                data:result[key],
+            };
+            values.push(temp);
+        }
+        console.log(keys);
+        console.log(values);
+        var xAxis = intiXAxis();
+        var line = echarts.init(document.getElementById('line'));
+
+        option = {
+            title: {
+                text: '折线图堆叠'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:keys
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: xAxis
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: values
+        };
+        line.setOption(option);
+    }
+
+    function initHotArticles(result){
+        var hotHead = document.getElementById("hotHead");
+        var hotArticles = document.getElementById("hotArticles");
+
+        var hotHeadHtml = "";
+        var hotArticlesHtml = "";
+
+        for(var key in legendMap){
+            if(typeof result[key]!="undefined" || key=="hot"){
+                if(key=="hot"){
+                    hotHeadHtml+="<li class='layui-tab-item layui-this'>"+legendMap[key]+"</li>";
+                    hotArticlesHtml += "<div class='layui-tab-item layui-show'>";
+                }else{
+                    hotHeadHtml+="<li class='layui-tab-item'>"+legendMap[key]+"</li>";
+                    hotArticlesHtml += "<div class='layui-tab-item'>";
+                }
+                for(var i=0;i<result[key].length;i++){
+                    let title = result[key][i]["title"];
+                    hotArticlesHtml += "" +
+                        "<div style='white-space: nowrap; overflow: hidden;text-overflow: ellipsis;padding: 2px 0px;'>" +
+                        "   <a href='${ctxPath}/console/getArticle?id="+result[key][i]["id"]+"' title='"+title+"'>"+ title+"</a>" +
+                        "</div>"
+                }
+                hotArticlesHtml += " <div style='margin-top: 10px;'><a href='${ctxPath}/console/getAllArticles'>更多>></a></div>"
+                hotArticlesHtml += "</div>";
+            }
+        }
+
+        hotHead.innerHTML = hotHeadHtml;
+        hotArticles.innerHTML = hotArticlesHtml;
+
+    }
+
+    function initBar() {
+        var bar1 = echarts.init(document.getElementById('bar1'));
+        var bar2 = echarts.init(document.getElementById('bar2'));
+        var bar3 = echarts.init(document.getElementById('bar3'));
+        var bar4 = echarts.init(document.getElementById('bar4'));
+
+        var words = [];
+        var count = [];
+        for (var i = 0; i < 20; i++) {
+            words.push("word" + i);
+            count.push(Math.ceil(Math.random() * 100));
+        }
+        // 指定图表的配置项和数据
+        var option = {
+            color: ['#3398DB'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: words,
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel:{
+                        interval: 0,  //控制坐标轴刻度标签的显示间隔.设置成 0 强制显示所有标签。设置为 1，隔一个标签显示一个标签。设置为2，间隔2个标签。以此类推
+                        rotate:45,//倾斜度 -90 至 90 默认为0
+                    },
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                }
+            ],
+            series: [
+                {
+                    name: '直接访问',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: count
+                }
+            ]
+        };
+
+        bar1.setOption(option);
+        bar2.setOption(option);
+        bar3.setOption(option);
+        bar4.setOption(option);
+
+    }
+
+    function initCloud(result){
+        var div = "";
+        var datas = {};
+        for(var key in result){
+            div +=
+                "<div class='layui-col-xs3'>" +
+                legendMap[key] +
+                "    <div class='grid-demo'>" +
+                "        <div id='cloud-" +key+ "' style='height: 200px;width: 100%'></div>" +
+                "    </div>" +
+                "</div>";
+
+            var thisCategory = [];      //关键词数据
+            for(var words in result[key]){
+                var temp = {
+                    name:words,
+                    value:result[key][words]
+                };
+                thisCategory.push(temp);
+            }
+            datas[key] = thisCategory;
+        }
+
+        var cloudNode = document.getElementById('keywordCloud');
+        cloudNode.innerHTML=div;
+
+        for(var key in result){
+            var chart = echarts.init(document.getElementById('cloud-'+key));
+            var option = {
+                tooltip: {},
+                series: [ {
+                    type: 'wordCloud',
+                    gridSize: 2,
+                    sizeRange: [12, 50],
+                    rotationRange: [-90, 90],
+                    shape: 'circle',
+                    left: 'center',
+                    top: 'center',
+                    width: '90%',
+                    height: '90%',
+                    drawOutOfBound: false,
+                    textStyle: {
+                        normal: {
+                            color: function () {
+                                return 'rgb(' + [
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160)
+                                ].join(',') + ')';
+                            }
+                        },
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowColor: '#333'
+                        }
+                    },
+                    data:datas[key]
+                } ]
+            };
+            chart.setOption(option);
+        }
+    }
+
+    function initTools(result){
+        var caseHtml = "";
+        var methodHtml = "";
+        for(var i in result["cases"]){
+            caseHtml+="" +
+                "<div class='layui-col-md2'>" +
+                "   <div class='grid-demo'>" +
+                "       <a href='"+Feng.ctxPath+"/tools/showFile?id="+result["cases"][i]["id"]+"'>" +
+                "           <img class = 'tool-img' title= '"+result["cases"][i]["summary"]+"' src='/assets/expand/images/"+result["cases"][i]["fileType"]+".svg'/>" +
+                "           <div>"+result["cases"][i]["name"]+"</div>" +
+                "       </a>" +
+                "   </div>" +
+                "</div>";
+        }
+        for(var i in result["methods"]){
+            methodHtml+="" +
+                "<div class='layui-col-md2'>" +
+                "   <div class='grid-demo'>" +
+                "       <a href='"+Feng.ctxPath+"/tools/showFile?id="+result["methods"][i]["id"]+"'>" +
+                "           <img class = 'tool-img' title= '"+result["methods"][i]["summary"]+"' src='/assets/expand/images/"+result["methods"][i]["fileType"]+".svg'/>" +
+                "           <div>"+result["methods"][i]["name"]+"</div>" +
+                "       </a>" +
+                "   </div>" +
+                "</div>";
+        }
+
+        var caseLib = document.getElementById('caseLib');
+        caseLib.innerHTML=caseHtml;
+        var methodLib = document.getElementById('methodLib');
+        methodLib.innerHTML=methodHtml;
+
+        $(".tool-img").mouseover(function (e) {
+            var myTitle = this.title;
+            this.title="";
+            var msg = "<div id = 'toolSuggest'>"+myTitle+"</div>";
+            $("body").append(msg);
+            $("#toolSuggest").css({"left":(e.pageX+10)+'px',"top":(e.pageY-80)+'px'}).show("fast");
+        }).mousemove(function (e) {
+            $("#toolSuggest").css({"left":(e.pageX+10)+'px',"top":(e.pageY-80)+'px'}).show("fast");
+        }).mouseout(function (e) {
+            this.title = $("#toolSuggest").text();
+            $("#toolSuggest").remove();
+        })
+    }
+
+    function getCategroyMap () {
+        $.ajax({
+            url : Feng.ctxPath + "/dict/list?dictTypeId=1192261339146403841",
+            type : "GET",
+            contentType: "application/json",
+            dataType: "json",
+            success : function(response){
+                $.each(response.data, function (i, value) {
+                    legendMap[value.code]=value.name;
+                });
+                console.log(legendMap);
+            }
+        });
+    }
+
+});
+
+
+</script>
+</body>
+
+</html>

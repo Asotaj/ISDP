@@ -1,0 +1,26 @@
+@layout("/common/_container.html",{bg:"bg-white",js:["/assets/modular/business/regular/regular_edit.js"]}){
+<form id="regularForm" lay-filter="regularForm" class="layui-form model-form">
+    <input  id="id" name="id" type="hidden"/>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input id="name" name="name" placeholder="请输入规则名称" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+   
+    <div class="layui-form-item">
+        <label class="layui-form-label">规则表达式<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <textarea id="regular" id="regular" name="regular" placeholder="请输入规则表达式" class="layui-textarea" rows="5"></textarea>
+
+        </div>
+    </div>
+   
+
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+@}

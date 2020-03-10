@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="${ctxPath}/assets/common/layui/css/layui.css"><!-- 内容页字体大小 -->
+
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo" style="width:150px;color:#fff">智能战略决策平台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left" style="left:150px;">
+            <li class="layui-nav-item">
+                <a href="javascript:;">全部</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">1</a></dd>
+                    <dd><a href="">2</a></dd>
+                    <dd><a href="">3</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">作业管理</a>
+            </li>
+            <li class="layui-nav-item"><a href="">数据管理</a></li>
+            <li class="layui-nav-item"><a href="">资源管理</a></li>
+            <li class="layui-nav-item"><a href="">平台监控</a></li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    admin
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-body" style="left:0px;bottom:0px">
+        <iframe class="embed-responsive-item" id="mainFrame"
+                src="demo.html" frameborder="no" border="0" marginwidth="0" marginheight="0" allowtransparency="yes"></iframe>
+    </div>
+
+</div>
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/libs/jquery/drag.js"></script>
+
+<script>
+    //JavaScript代码区域
+    $(function () {
+        initSize();
+    });
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+    var height;
+    function initSize () {
+        //获取窗口高度
+        if (window.innerHeight){
+            height = window.innerHeight;
+        }else if ((document.body) && (document.body.clientHeight)){
+            height = document.body.clientHeight;
+        }
+        var oFrm = document.getElementById ('mainFrame');
+        oFrm.setAttribute ('height', height - 70);
+        oFrm.setAttribute ('width', "100%");
+    }
+</script>
+</body>
+</html>

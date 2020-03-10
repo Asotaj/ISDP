@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <META NAME="save" CONTENT="history">
+    <title>${systemName}</title>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/layui/css/layui.css"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/module/admin.css?v=311"/>
+    <link rel="stylesheet" href="${ctxPath}/assets/expand/css/style.css" media="all"/>
+    <style>
+        #searchInput{
+            width: 400px;
+            height: 26px;
+            margin-left: 20px;
+        }
+        #searchButton{
+            width: 70px;
+        }
+        #uploadButton{
+            width: 70px;
+            float: right;
+            margin:5px 10px;
+        }
+        .search-result-item{
+            margin: 10px 56px 15px 56px;
+            width: 55%;
+        }
+        .search-result-item a{
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+            color: #0680dd;
+        }
+        .search-result-item img{
+            height: 22px;
+            width: 22px;
+            margin: 0px 1px 2px 0px;
+        }
+        .search-result-item-body{
+            color: #757575;
+            font-size: 12px;
+        }
+        .search-result-item-endNote{
+            color: #757575;
+            font-size: 12px;
+        }
+        .search-result-item-highlight{
+            color: #ff0000;
+        }
+        #pageItem{
+            height: 60px;
+            margin: 0px 65px;
+        }
+        .upload-info-label{
+            text-align: right;
+            padding-right: 20px;
+        }
+        #submit{
+            float: right;
+            margin: 0px 10px 0px 0px;
+            width: 60px;
+        }
+        #uploadFileIcon{
+            height: 22px;
+            width: 22px;
+        }
+        #deleteButton{
+            font-size: 20px;
+            color: black;
+            float: right;
+            margin-right: 20px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<div style="width: 98%;margin: 10px auto;" >
+    <div class="layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <b>方法库</b>
+                <input type="text" id="searchInput"/>
+                <button type='button' class='layui-btn layui-btn-sm ' id="searchButton">搜索一下</button>
+                <button type='button' class='layui-btn layui-btn-sm layui-btn-warm' id="uploadButton">上传文档</button>
+            </div>
+            <div class="layui-card-body" id="searchContent" style="display: block;">
+                <div class="layui-tab-content"  id="search-results"></div>
+                <div id="pageItem"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="uploadInfo" style="width: 620px;margin: 10px auto 0px auto;display: none;" >
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body layui-form">
+
+                    <div class="layui-form-item" style="margin-top:10px; ">
+                        <label class="layui-form-label" style="width: 70px;">
+                            <img id = "uploadFileIcon" src="/assets/expand/images/PDF-icon.jpg">
+                        </label>
+                        <div class="layui-input-block" style="margin-left: 100px;">
+                            <input class="layui-input" type="text" id="uploadFileName" style="width:400px;display: inline-block "/>
+                            <i id="deleteButton" class="layui-icon layui-icon-delete"></i>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 70px;">页数:</label>
+                        <div class="layui-input-block" style="margin-left: 100px;">
+                            <input id="pageCount" type="text" name="name" class="layui-input" style="width:400px; "/>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 70px;">摘要:</label>
+                        <div class="layui-input-block" style="margin-left: 100px;">
+                            <textarea id="summary" class="layui-input" style="width:400px;height:120px;padding-top: 5px;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type='button' class='layui-btn layui-btn-sm ' id="submit">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input style="display: none;" id="isReload" type="text">
+
+<!-- js部分 -->
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+        addCtx: function (ctx) {
+            if (this.ctxPath === "") {
+                this.ctxPath = ctx;
+            }
+        }
+    };
+    Feng.addCtx("${ctxPath}");
+</script>
+
+<script type="text/javascript" src="${ctxPath}/assets/common/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/common/js/common.js?v=311"></script>
+<script type="text/javascript" src="${ctxPath}/assets/expand/plugins/echart/echarts.js"></script>
+<script type="text/javascript" src="${ctxPath}/assets/expand/plugins/echart/extension/echarts-wordcloud.js"></script>
+
+<script>
+
+    layui.use(['layer','ax','element','laypage','upload'],function () {
+        var $=layui.jquery;
+        var $ax = layui.ax;
+        var $layer = layui.layer;
+        var element = layui.element;
+        var laypage = layui.laypage;
+        var upload = layui.upload;
+
+        var uploadInst = upload.render({
+            elem: '#uploadButton' //绑定元素
+            ,url: Feng.ctxPath +'/tools/uploadFile' //上传接口
+            ,data: {
+                toolType:"method",
+                name:function(){
+                    return $("#uploadFileName").val();
+                },
+                pageCount:function(){
+                    return $("#pageCount").val();
+                },
+                summary:function(){
+                    return $("#summary").val()
+                }
+            }
+            ,accept: 'file' //允许上传的文件类型
+            ,size: 200*1024 //最大允许上传的文件大小 单位kb
+            ,exts:"doc|docx|ppt|pptx|pdf|xls|xlsx"  //允许上传的文件扩展名
+            ,auto:false         //是否自动上传
+            ,bindAction:'#submit'       //不自动上传绑定其他按钮
+            ,choose:function(obj){
+                files = obj.pushFile();
+                var fileIndex="";
+                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                obj.preview(function(index, file, result){ //文件索引、文件对象、文件base64编码
+                    fileIndex=index;
+                    var fileName = file["name"];
+                    var extIndex = fileName.lastIndexOf(".");
+                    var extName= fileName.slice(extIndex);
+                    var fileType = getFileType(extName);
+                    $("#uploadFileName").val(fileName.slice(0,extIndex));
+                    $("#uploadFileIcon").attr("src",Feng.ctxPath + "/assets/expand/images/"+fileType+"-icon.jpg");
+
+                    //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+
+                    //这里还可以做一些 append 文件列表 DOM 的操作
+
+                    //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+                    //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+                });
+
+                //弹出信息填写框
+                var layerIndex = $layer.open({
+                    type:1,
+                    area:["630px","335px"],
+                    title:false,
+                    content:$("#uploadInfo"),
+                    closeBtn:0,
+                    success:function(){
+                        $("#deleteButton").on("click",function(){
+                            $("#uploadFileName").val("");
+                            $("#pageCount").val("");
+                            $("#summary").val("");
+                            uploadInst.config.elem.next()[0].value = '';    //清空 input file 值，以免删除后出现同名文件不可选
+                            $layer.close(layerIndex);
+                        })
+                    }
+                })
+            }
+            ,before:function(){
+                $layer.load(2); //上传loading
+            }
+            ,done: function(res,index){
+                //上传完毕回调
+                $layer.closeAll();
+                if(res.status == 1){
+                    layer.msg("上传成功！");
+                }else{
+                    layer.msg(res.msg);
+                }
+                $("#uploadFileName").val("");
+                $("#pageCount").val("");
+                $("#summary").val("");
+                delete files[index];
+            }
+            ,error: function(){
+                //请求异常回调
+                $layer.closeAll("loading");
+            }
+        });
+
+        //搜索按钮
+        $("#searchButton").on("click",function(){
+            searchFiles($,$layer,laypage);
+        });
+
+        //浏览器回退时恢复页面
+        if($("#isReload").val()==""){
+            searchFiles();
+        }else if($("#isReload").val()!="" && sessionStorage.getItem("method_count")!=null){
+            reloadPage();
+        }else{
+            searchFiles();
+        }
+
+        /*-------------------------functions--------------------------*/
+
+        function searchFiles(){
+            //获取匹配总数，初始化分页
+            $.ajax({
+                url:Feng.ctxPath + "/tools/searchCount",
+                type:"post",
+                data:{
+                    "keyword":$("#searchInput").val(),
+                    "type":"method"
+                },
+                success:function (count) {
+                    sessionStorage.setItem("method_count",count);
+                    laypage.render({
+                        elem:"pageItem",
+                        count:count ,
+                        limit:10,
+                        layout:['prev', 'page', 'next'],
+                        jump: function(obj, first){
+                            //首次不执行
+                            if(!first){
+                                //do something
+                                initResults(obj.curr,obj.limit);
+                            }
+                        }
+                    })
+                }
+            });
+
+            initResults(1,10);
+        }
+
+        //查找、呈现匹配结果
+        function initResults(current,limit) {
+            var index = $layer.load(2);
+            $.ajax({
+                url:Feng.ctxPath + "/tools/search",
+                type:"post",
+                data:{
+                    "keyword":$("#searchInput").val(),
+                    "current":current,
+                    "limit":limit,
+                    "type":"method"
+                },
+                success:function (datas) {
+                    var keywords = $("#searchInput").val().split(/\s+/);
+                    var resultHtml = "";
+                    for(var i in datas){
+                        var title = datas[i]["name"];
+                        var body =datas[i]["summary"].slice(0,145);
+                        //highlight 关键词
+                        for(var j in keywords){
+                            if(keywords[j]!="") {
+                                title = title.replace(new RegExp(keywords[j], "gm"), "<span class='search-result-item-highlight'>" + keywords[j] + "</span>");
+                                body = body.replace(new RegExp(keywords[j], "gm"), "<span class='search-result-item-highlight'>" + keywords[j] + "</span>");
+                            }
+                        }
+                        resultHtml +=
+                            "<div class='search-result-item'>" +
+                            "   <h3>" +
+                            "       <img src='/assets/expand/images/"+datas[i]["fileType"]+"-icon.jpg'/>" +
+                            // "       <a href='"+Feng.ctxPath+"/tools/downloadFile/"+datas[i]["id"]+"'>"+title+"</a>" +
+                            "       <a href='"+Feng.ctxPath+"/tools/showFile?id="+datas[i]["id"]+"'>"+title+"</a>" +
+                            "   </h3>" +
+                            "   <div class='search-result-item-body'>" +body+"</div>" +
+                            "   <div class='search-result-item-endNote'>"+
+                            datas[i]["uploadTime"]+" | 共"+datas[i]["pageCount"]+"页 | "+datas[i]["readCount"]+"次阅读 | 方法库"+
+                            "   </div>" +
+                            "</div>";
+                    }
+                    $("#search-results").html(resultHtml);
+
+                    sessionStorage.setItem("method_current",current);
+                    sessionStorage.setItem("method_datas",JSON.stringify(datas));
+                    $("#isReload").val(current);
+                    $layer.close(index);
+                }
+            })
+        }
+
+        function reloadPage() {
+            laypage.render({
+                elem:"pageItem",
+                count:sessionStorage.getItem("method_count") ,
+                limit:10,
+                layout:['prev', 'page', 'next'],
+                curr:sessionStorage.getItem("method_current"),
+                jump: function(obj, first){
+                    //首次不执行
+                    if(!first){
+                        //do something
+                        initResults(obj.curr,obj.limit);
+                    }
+                }
+            });
+            var datas = JSON.parse(sessionStorage.getItem("method_datas"));
+            var keywords = $("#searchInput").val().split(/\s+/);
+            var resultHtml = "";
+            for(var i in datas){
+                var title = datas[i]["name"];
+                var body =datas[i]["summary"].slice(0,145);
+                //highlight 关键词
+                for(var j in keywords){
+                    title = title.replace(new RegExp(keywords[j],"gm"),"<span class='search-result-item-highlight'>"+keywords[j]+"</span>");
+                    body = body.replace(new RegExp(keywords[j],"gm"),"<span class='search-result-item-highlight'>"+keywords[j]+"</span>");
+                }
+                resultHtml +=
+                    "<div class='search-result-item'>" +
+                    "   <h3>" +
+                    "       <img src='/assets/expand/images/"+datas[i]["fileType"]+"-icon.jpg'/>" +
+                    // "       <a href='"+Feng.ctxPath+"/tools/downloadFile/"+datas[i]["id"]+"'>"+title+"</a>" +
+                    "       <a href='"+Feng.ctxPath+"/tools/showFile?id="+datas[i]["id"]+"'>"+title+"</a>" +
+                    "   </h3>" +
+                    "   <div class='search-result-item-body'>" +body+"</div>" +
+                    "   <div class='search-result-item-endNote'>"+
+                    datas[i]["uploadTime"]+" | 共"+datas[i]["pageCount"]+"页 | "+datas[i]["readCount"]+"次阅读 | 方法库"+
+                    "   </div>" +
+                    "</div>";
+            }
+            $("#search-results").html(resultHtml);
+
+        }
+
+        //扩展名解析，返回文件类型
+        function getFileType(extName){
+            var fileTypeMap = {} ;
+            var word = [".doc",".docx"];
+            var excel = [".xls",".xlsx"];
+            var ppt = [".ppt",".pptx"];
+            var pdf = [".pdf"];
+            var txt = [".txt"];
+
+            fileTypeMap["WORD"] = word;
+            fileTypeMap["EXCEL"] = excel;
+            fileTypeMap["PPT"] = ppt;
+            fileTypeMap["PDF"] = pdf;
+            fileTypeMap["TXT"] = txt;
+
+            for(var key in fileTypeMap){
+                if(fileTypeMap[key].indexOf(extName)>=0){
+                    return key;
+                }
+            }
+            return null;
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

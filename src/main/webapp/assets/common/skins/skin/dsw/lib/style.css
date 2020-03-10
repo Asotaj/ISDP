@@ -1,0 +1,99 @@
+@font-face {
+  font-family: 'FontAwesome';
+  src:  url('../../fonts/FontAwesome.eot?ih8maj');
+  src:  url('../../fonts/FontAwesome.eot?ih8maj#iefix') format('embedded-opentype'),
+    url('../../fonts/FontAwesome.ttf?ih8maj') format('truetype'),
+    url('../../fonts/FontAwesome.woff?ih8maj') format('woff'),
+    url('../../fonts/FontAwesome.svg?ih8maj#FontAwesome') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'FontAwesome' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 
+*i是inline-block，内层的：before需要强制写成inline才行
+*如果写成inline-block，inlineblock包不住inline-block，所以小图标整体会偏移
+*在font-awesome.min.css中有设置icon-都会变成inline-block。所以需要在每一个图标上都设置一下 */
+
+.icon-idsw-service:before {
+  content: "\e904";
+  display: inline !important;
+}
+.icon-idsw-images:before {
+  content: "\e900";
+  display: inline !important;
+}
+.icon-idsw-userdefined:before {
+  content: "\e901";
+  display: inline !important;
+}
+.icon-file-text:before {
+  content: "\e902";
+  display: inline !important;
+}
+.icon-idsw-model:before {
+  content: "\e903";
+  display: inline !important;
+}
+.icon-idsw-inout:before {
+  content: "\e90a";
+  display: inline !important;
+}
+.icon-idsw-ml:before {
+  content: "\e906";
+  display: inline !important;
+}
+.icon-idsw-fileformat:before {
+  content: "\e907";
+  display: inline !important;
+}
+.icon-idsw-feature:before {
+  content: "\e908";
+  display: inline !important;
+}
+.icon-idsw-dataset:before {
+  content: "\e909";
+  display: inline !important;
+}
+.icon-idsw-dataprocess:before {
+  content: "\e905";
+  display: inline !important;
+}
+.icon-idsw-graph:before {
+  content: "\e90b";
+  display: inline !important;
+}
+.icon-idsw-model1:before {
+  content: "\e90c";
+  display: inline !important;
+}
+.icon-idsw-timeseries:before {
+  content: "\e90e";
+  display: inline !important;
+}
+.icon-idsw-statistics:before {
+  content: "\e90f";
+  display: inline !important;
+}
+.icon-idsw-pythoncode:before {
+  content: "\e910";
+  display: inline !important;
+}
+.icon-idsw-network:before {
+  content: "\e911";
+  display: inline !important;
+}

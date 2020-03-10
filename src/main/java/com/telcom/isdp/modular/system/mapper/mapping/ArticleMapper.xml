@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telcom.isdp.modular.system.mapper.ArticleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.telcom.isdp.modular.system.entity.Article">
+        <id column="id" property="Id" />
+        <result column="title" property="title" />
+        <result column="url" property="url" />
+        <result column="source" property="source" />
+        <result column="time" property="time" />
+        <result column="content" property="content" />
+        <result column="website" property="website" />
+        <result column="author" property="author" />
+        <result column="keywords" property="keywords" />
+        <result column="abstract" property="abstracts" />
+        <result column="category" property="category" />
+        <result column="like_article_count" property="like_article_count" />
+		<result column="is_deleted" property="is_deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "Id", title AS "title", url AS "url", source AS "source", time AS "time", content AS "content", website AS "website", author AS "author", keywords AS "keywords", abstract AS "abstract", category AS "category", like_article_count AS "like_article_count", is_deleted AS "is_deleted"
+    </sql>
+
+    <select id="selectArticle" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from article
+        where is_deleted!=1
+        <if test="condition != null">
+
+        </if>
+
+    </select>
+
+    <select id="selectArticleByfxSJ" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from article
+        where is_deleted!=1
+        <if test="titleCondition != null">
+            AND ${titleCondition}
+        </if>
+    </select>
+
+    <select id="selectArticleByCon" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from article
+        where is_deleted!=1
+        <if test="source != null and source != ''">
+            and source IN
+            <foreach collection="source" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="category != null and category != ''">
+            and
+            <foreach collection="category" item="item" index="index" open="(" close=")" separator=" or ">
+                category LIKE CONCAT('%',#{item},'%')
+            </foreach>
+        </if>
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and (time between CONCAT(#{startTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+    </select>
+
+    <select id="selectArticleBySave" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from article
+        where is_deleted!=1
+        <if test="saved != null and saved.size() != 0">
+            and id IN
+            <foreach collection="saved" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectArticleByList" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from article
+        where is_deleted!=1
+        <if test="source != null and source != ''">
+            and source IN
+            <foreach collection="source" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="category != null and category != ''">
+            and
+            <foreach collection="category" item="item" index="index" open="(" close=")" separator=" or ">
+                category LIKE CONCAT('%',#{item},'%')
+            </foreach>
+        </if>
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and (time between CONCAT(#{startTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+    </select>
+
+    <select id="list" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from article where is_deleted!=1
+
+        <if test="Id != null and Id != ''">
+            and (id = #{Id} )
+        </if>
+        order by sort ASC
+    </select>
+    <delete id="deleteArticle">
+		delete from article where id = #{Id}
+	</delete>
+    <delete id="selectArticleByOne">
+         select
+        <include refid="Base_Column_List"/>
+		 from article where id = #{Id} and is_deleted!=1
+	</delete>
+
+    <select id="selectArticleByKeyword" resultType="com.telcom.isdp.modular.system.entity.Article">
+        select
+        <include refid="Base_Column_List"/>
+        from article where is_deleted!=1
+        <if test="keyword !=null and keyword!=''">
+            and keywords like CONCAT('%',#{keyword},'%')
+        </if>
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            and (time between CONCAT(#{startTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+        order by time
+    </select>
+
+</mapper>
