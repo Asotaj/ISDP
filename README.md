@@ -13,3 +13,13 @@
    <br>
    6.访问 localhost:8080，账号密码：admin/111111
  </p>
+ 
+ ##2.数据同步和NLP服务调用
+ 敏感信息，私下发，然后替换掉<br>
+ ISDP\src\main\java\com\telcom\isdp\core\util\DataNtpUtil.java
+
+ ##3.安装软件
+ IntelliJ IDEA<br>
+ JDK1.8 <br>
+ Mysql5.6+<br>
+ Maven3
